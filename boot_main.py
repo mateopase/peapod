@@ -1,10 +1,11 @@
 import digitalio
-import storage
-import usb_cdc
-import usb_hid
-import usb_midi
 
-from kb import Peapod
+from peapod import Peapod
+from utils import (
+    enable_dev_mode,
+    enable_keyboard_mode,
+    reboot_to_bootloader
+)
 
 
 BOOTLOADER_KEY = (0, 0)  # Q
@@ -31,23 +32,11 @@ def get_switch(coord: tuple) -> bool:
     return value
 
 
-# Immediaately reboot to bootloader if Q is pressed
 if get_switch(BOOTLOADER_KEY):
-    import microcontroller
-
-    microcontroller.on_next_reset(microcontroller.RunMode.BOOTLOADER)
-    microcontroller.reset()
-
-
-# Continue boot w/ development enabled if P is pressed
-if get_switch(DEV_KEY):
-    print("Booting in development mode. USB storage and serial console enabled.")
-    usb_cdc.enable()
-    usb_midi.disable()
-    storage.enable_usb_drive()
+    # Immediaately reboot to bootloader if Q is pressed
+    reboot_to_bootloader()
+elif get_switch(DEV_KEY):
+    # Continue boot w/ development enabled if P is pressed
+    enable_dev_mode()
 else:
-    usb_cdc.disable()
-    usb_midi.disable()
-    storage.disable_usb_drive()
-    usb_hid.enable((usb_hid.Device.KEYBOARD,), boot_device=1)
-
+    enable_keyboard_mode()

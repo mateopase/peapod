@@ -1,7 +1,6 @@
 from kmk.keys import KC
 from kb import Peapod
 
-raise Exception("break the code")
 
 keyboard = Peapod()
 
