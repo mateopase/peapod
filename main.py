@@ -1,5 +1,5 @@
 from kmk.keys import KC
-from kb import Peapod
+from peapod import Peapod
 
 
 keyboard = Peapod()
